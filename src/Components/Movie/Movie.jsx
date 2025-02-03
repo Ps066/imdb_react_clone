@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {useCallback, useEffect, useState} from "react"
 import "./movie.css"
 import { useParams } from "react-router-dom"
 
@@ -6,11 +6,11 @@ const Movie = () => {
     const [currentMovieDetail, setMovie] = useState()
     const { id } = useParams()
 
-    const getData = () => {
+    const getData = useCallback(() => {
         fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=650d3e38cf6cfbf478abb5010cd579d4&language=en-US`)
         .then(res => res.json())
         .then(data => setMovie(data))
-    }
+    }, [id]);
 
     useEffect(() => {
         getData()
@@ -22,12 +22,12 @@ const Movie = () => {
     return (
         <div className="movie">
             <div className="movie__intro">
-                <img className="movie__backdrop" src={`https://image.tmdb.org/t/p/original${currentMovieDetail ? currentMovieDetail.backdrop_path : ""}`} />
+                <img className="movie__backdrop" src={`https://image.tmdb.org/t/p/original${currentMovieDetail ? currentMovieDetail.backdrop_path : ""}`} alt={currentMovieDetail ? currentMovieDetail.original_title : ""}/>
             </div>
             <div className="movie__detail">
                 <div className="movie__detailLeft">
                     <div className="movie__posterBox">
-                        <img className="movie__poster" src={`https://image.tmdb.org/t/p/original${currentMovieDetail ? currentMovieDetail.poster_path : ""}`} />
+                        <img className="movie__poster" src={`https://image.tmdb.org/t/p/original${currentMovieDetail ? currentMovieDetail.poster_path : ""}`} alt={currentMovieDetail ? currentMovieDetail.original_title : ""}/>
                     </div>
                 </div>
                 <div className="movie__detailRight">
@@ -62,10 +62,10 @@ const Movie = () => {
             <div className="movie__links">
                 <div className="movie__heading">Useful Links</div>
                 {
-                    currentMovieDetail && currentMovieDetail.homepage && <a href={currentMovieDetail.homepage} target="_blank" style={{textDecoration: "none"}}><p><span className="movie__homeButton movie__Button">Homepage <i className="newTab fas fa-external-link-alt"></i></span></p></a>
+                    currentMovieDetail && currentMovieDetail.homepage && <a href={currentMovieDetail.homepage} target="_blank"  rel="noopener noreferrer" style={{textDecoration: "none"}}><p><span className="movie__homeButton movie__Button">Homepage <i className="newTab fas fa-external-link-alt"></i></span></p></a>
                 }
                 {
-                    currentMovieDetail && currentMovieDetail.imdb_id && <a href={"https://www.imdb.com/title/" + currentMovieDetail.imdb_id} target="_blank" style={{textDecoration: "none"}}><p><span className="movie__imdbButton movie__Button">IMDb<i className="newTab fas fa-external-link-alt"></i></span></p></a>
+                    currentMovieDetail && currentMovieDetail.imdb_id && <a href={"https://www.imdb.com/title/" + currentMovieDetail.imdb_id} target="_blank" rel="noopener noreferrer" style={{textDecoration: "none"}}><p><span className="movie__imdbButton movie__Button">IMDb<i className="newTab fas fa-external-link-alt"></i></span></p></a>
                 }
             </div>
             <div className="movie__heading">Production companies</div>
@@ -77,7 +77,7 @@ const Movie = () => {
                                 company.logo_path 
                                 && 
                                 <span className="productionCompanyImage">
-                                    <img className="movie__productionComapany" src={"https://image.tmdb.org/t/p/original" + company.logo_path} />
+                                    <img className="movie__productionComapany" src={"https://image.tmdb.org/t/p/original" + company.logo_path} alt={currentMovieDetail ? currentMovieDetail.original_title : ""}/>
                                     <span>{company.name}</span>
                                 </span>
                             }
