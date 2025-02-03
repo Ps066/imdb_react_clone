@@ -22,12 +22,12 @@ const MovieList = () => {
     // initial useEffect on page load
     useEffect(()=>{
         getData();
-    },[])
+    },[getData])
 
     // useEffect when type sets
-    useEffect(()=>{
-        getData();
-    },[type])
+    // useEffect(()=>{
+    //     getData();
+    // },[type])
 
     // // getData method
     // const getData = () =>{
